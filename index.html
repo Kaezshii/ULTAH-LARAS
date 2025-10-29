@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MET ULANG TAHUN LARAASS </title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#ffd6e8; --bg2:#fce7f3; --accent:#ff78b6; --muted:#6d4250;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:'Poppins',system-ui,Arial;}
+  body{
+    background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    color: #3b2430;
+    overflow:hidden;
+  }
+
+  /* OVERLAY (pita) */
+  .overlay{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:9999; touch-action:none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    transition: transform 700ms cubic-bezier(.2,.9,.3,1), opacity 400ms;
+    will-change: transform, opacity;
+  }
+  .gift{
+    width:88%; max-width:760px; height:68vh; max-height:640px;
+    background: linear-gradient(180deg,#fff,#fff8fb);
+    border-radius:22px; position:relative; overflow:hidden;
+    box-shadow: 0 18px 50px rgba(120,50,90,0.18); display:flex; align-items:center;
+    justify-content:center; flex-direction:column; padding-top:36px;
+  }
+
+  /* ribbon top & bow */
+  .ribbon-top{
+    position:absolute; top:0; left:0; right:0; height:110px;
+    background: linear-gradient(90deg,#ffb1d0,#ff78b6);
+    clip-path: polygon(0 0,100% 0,100% 65%,50% 100%,0 65%);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;
+  }
+  .bow{
+    position:absolute; top:66px; left:50%; transform:translateX(-50%) rotate(-10deg);
+    width:170px; height:80px; border-radius:48px;
+    background: radial-gradient(circle at 30% 40%, #ffd0e5, #ff78b6);
+    box-shadow: 0 8px 18px rgba(200,70,120,0.18);
+  }
+  .bow::after{ content:''; position:absolute; right:-30px; top:10px; width:60px; height:60px;
+    background: radial-gradient(circle at 70% 30%, #fff0fb, #ff5f9f); border-radius:50%; }
+
+  .hint{
+    position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; gap:10px;
+    align-items:center; background:rgba(255,255,255,0.9); padding:10px 14px; border-radius:999px;
+    color:var(--muted); font-weight:600; box-shadow: 0 6px 18px rgba(80,30,60,0.06);
+  }
+  .bar{ position:absolute; bottom:18px; left:50%; transform:translateX(-50%); width:160px; height:8px;
+    background:rgba(255,255,255,0.6); border-radius:10px; }
+
+  /* MAIN CONTENT (under overlay) */
+  main{ position:relative; min-height:100vh; padding:42px 20px; display:flex; align-items:center;
+    justify-content:center; flex-direction:column; gap:18px; text-align:center; overflow:auto;}
+  .title{ font-size:clamp(24px,4.4vw,44px); font-weight:700; color:#3b2430; margin:0; }
+  .subtitle{ margin:0; color:var(--muted); font-weight:600; }
+
+  /* layout: gallery left, message right on wide screens; stacked on mobile */
+  .container{
+    display:flex; gap:20px; align-items:flex-start; justify-content:center; margin-top:8px;
+    width:100%; max-width:980px;
+  }
+  .gallery{
+    width:320px; background:linear-gradient(180deg,#fff,#fffaf7); border-radius:14px; padding:8px;
+    box-shadow: 0 10px 30px rgba(120,50,90,0.08); overflow:hidden;
+  }
+  .gallery .big{ width:100%; height:320px; border-radius:10px; overflow:hidden; }
+  .thumbs{ display:flex; gap:8px; margin-top:8px; justify-content:center; flex-wrap:wrap;}
+  .thumbs img{ width:60px; height:60px; object-fit:cover; border-radius:8px; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,0.06); }
+
+  .message{
+    flex:1; background:linear-gradient(180deg,#fff,#fffefc); border-radius:14px; padding:18px;
+    box-shadow: 0 10px 30px rgba(120,50,90,0.08); max-height:420px; overflow:auto;
+  }
+  .message h3{ margin:0 0 10px 0; font-size:18px; color:var(--muted); }
+  .message .bigtext{ white-space:pre-wrap; text-align:left; font-size:16px; line-height:1.6; color:#3b2430; }
+
+  .controls{ display:flex; gap:12px; justify-content:center; margin-top:14px; }
+  .btn{ background:#fff; border:none; padding:10px 12px; border-radius:12px; cursor:pointer; font-weight:600; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+  .btn.play{ color:var(--accent); background:linear-gradient(90deg,#fff,#fff8fb); }
+
+  /* confetti pieces */
+  .confetti{ position:fixed; inset:0; pointer-events:none; z-index:9000; overflow:hidden; }
+  .confetti i{ position:absolute; font-size:20px; will-change:transform,opacity; }
+
+  /* responsive */
+  @media (max-width:880px){
+    .container{ flex-direction:column; align-items:center }
+    .gallery{ width:260px } .gallery .big{ height:260px }
+    .message{ max-height:360px }
+  }
+</style>
+</head>
+<body>
+
+<!-- OVERLAY: swipe down to open -->
+<div class="overlay" id="overlay">
+  <div class="gift" id="gift">
+    <div class="ribbon-top">Surat suratan ceunah</div>
+    <div class="bow" aria-hidden="true"></div>
+
+    <div style="padding:24px; text-align:center;">
+      <h2 style="margin:8px 0 6px 0; color:var(--muted)">Haii idola akuuu</h2>
+      <p style="margin:0 0 8px 0; color:#5a3b47">Geser ke bawah cobaa</p>
+      <div class="hint" id="hint">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 5v14M5 12l7 7 7-7" stroke="#3b2430" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Geser ke bawah
+      </div>
+      <div class="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main id="main" aria-hidden="true">
+  <h1 class="title">SELAMAT ULANG TAHUUUNN LARAASS</h1>
+  <p class="subtitle">Semoga hari hari kamu bahagia terus selamanyaaa</p>
+
+  <div class="container">
+    <div class="gallery" id="gallery">
+      <div class="big" id="bigImgWrap">
+        <img id="bigImg" src="https://i.imgur.com/RB5lD1J.jpg" alt="foto" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="thumbs" id="thumbs">
+        <!-- thumbs inserted by JS -->
+      </div>
+    </div>
+
+    <div class="message" id="message">
+      <h3>Surat😛</h3>
+      <div class="bigtext" id="bigtext">
+Laras, selamat ulang tahun yaaa. Semoga semua hari hari kamu penuh hal hal yang positiiiffff. Panjang umur yaaa, kamu belum masuk ITB belum ini belum itu. Diluar dari semua keluhan kamuu, semoga kamu bahagia terus yaa selamanyaaa, ketawa ketiwi ga jelas. Semoga semua mimpi kamuu bisa terwujuddd yaa
+Kamu bilang kalo aku harus ngejaga diri, begitu juga kamu yaa. Jangan terlalu sering cape capeaann, sering sering makan buaah dan sayurr, minummm air ato susu. Mungkin itu aja kali ya, intinya semangat terusss, jangan takut buat ngelakuin apa yang kamu mauu. I'm rooting for you, Always.
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="surpriseBtn">Tampilkan Ulang Pesan</button>
+    <button class="btn play" id="playBtn">Putar Musik</button>
+  </div>
+</main>
+
+<!-- audio (discord link) -->
+<audio id="bg" preload="none" loop>
+  <source src="https://cdn.discordapp.com/attachments/1099735856492851422/1433087330805354587/True_Colors_Guitar_Cover_Justin_Timberlake_Anna_Kendrick__Tabs__Chords__mp3cut.net.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<!-- confetti container -->
+<div class="confetti" id="confetti"></div>
+
+<script>
+/* -------------------------
+  Setup images (use i.imgur.com direct links)
+-------------------------*/
+const imgs = [
+  'https://i.imgur.com/RB5lD1J.jpg',
+  'https://i.imgur.com/ioLwsh2.jpg',
+  'https://i.imgur.com/bb9tz75.jpg',
+  'https://i.imgur.com/0ieTjjT.jpg',
+  'https://i.imgur.com/bnnw7mk.jpg'
+];
+
+const thumbsEl = document.getElementById('thumbs');
+const bigImg = document.getElementById('bigImg');
+
+// create thumbs
+imgs.forEach((u,i)=>{
+  const img = document.createElement('img');
+  img.src = u;
+  img.alt = 'foto'+(i+1);
+  img.addEventListener('click', ()=> {
+    bigImg.src = u;
+  });
+  // fallback: if failed to load, hide
+  img.addEventListener('error', ()=> img.style.display='none');
+  thumbsEl.appendChild(img);
+});
+
+// big image error fallback
+bigImg.addEventListener('error', ()=> {
+  bigImg.src = imgs.find(x=>x) || '';
+});
+
+/* -------------------------
+  Swipe / drag overlay
+-------------------------*/
+const overlay = document.getElementById('overlay');
+const main = document.getElementById('main');
+let startY = null;
+let currentY = null;
+let isOpen = false;
+
+function start(e){
+  if(isOpen) return;
+  startY = e.touches ? e.touches[0].clientY : e.clientY;
+  overlay.style.transition = 'none';
+}
+function move(e){
+  if(startY === null || isOpen) return;
+  currentY = e.touches ? e.touches[0].clientY : e.clientY;
+  const dy = currentY - startY;
+  if(dy < 0) return;
+  const pct = Math.min(dy / (window.innerHeight * 0.6), 1);
+  overlay.style.transform = `translateY(${pct * 110}vh)`;
+}
+function end(e){
+  if(startY === null || isOpen) return;
+  currentY = currentY || startY;
+  const dy = currentY - startY;
+  overlay.style.transition = 'transform 600ms cubic-bezier(.2,.9,.3,1), opacity 300ms';
+  if(dy > 120){
+    open();
+  } else {
+    overlay.style.transform = '';
+  }
+  startY = null; currentY = null;
+}
+
+overlay.addEventListener('touchstart', start, {passive:true});
+overlay.addEventListener('touchmove', move, {passive:true});
+overlay.addEventListener('touchend', end);
+overlay.addEventListener('mousedown', start);
+document.addEventListener('mousemove', move);
+document.addEventListener('mouseup', end);
+
+// also allow click to open
+overlay.addEventListener('click', ()=> { if(!isOpen) open(); });
+
+/* -------------------------
+  open action: confetti + reveal + try autoplay
+-------------------------*/
+const confettiEl = document.getElementById('confetti');
+const audio = document.getElementById('bg');
+
+function open(){
+  isOpen = true;
+  overlay.style.transform = 'translateY(120vh)';
+  overlay.style.opacity = '0';
+  setTimeout(()=> { overlay.style.display='none'; main.removeAttribute('aria-hidden'); reveal(); }, 500);
+  burst(60);
+  // try autoplay after user gesture
+  setTimeout(()=> {
+    audio.play().then(()=> {
+      document.getElementById('playBtn').textContent = 'Pause Musik';
+    }).catch(()=> {
+      // autoplay blocked - leave Play button for manual start
+      console.log('autoplay blocked');
+    });
+  }, 350);
+}
+
+/* -------------------------
+  confetti function
+-------------------------*/
+function burst(amount){
+  for(let i=0;i<amount;i++) {
+    const el = document.createElement('i');
+    const choices = ['🎉','🎊','✨','💖','🎈'];
+    el.textContent = choices[Math.floor(Math.random()*choices.length)];
+    el.style.left = (20 + Math.random()*60) + 'vw';
+    el.style.top = (10 + Math.random()*20) + 'vh';
+    el.style.fontSize = (12 + Math.random()*26) + 'px';
+    confettiEl.appendChild(el);
+    const dx = (Math.random()-0.5) * 300;
+    const dy = 300 + Math.random()*300;
+    el.animate([
+      { transform: 'translate(0,0) rotate(0deg)', opacity:1 },
+      { transform: `translate(${dx}px, ${dy}px) rotate(${(Math.random()*720-360)}deg)`, opacity:0 }
+    ], { duration: 1500 + Math.random()*1000, easing:'cubic-bezier(.2,.9,.2,1)'});
+    setTimeout(()=> el.remove(), 2200);
+  }
+}
+
+/* -------------------------
+  Play/Pause button
+-------------------------*/
+const playBtn = document.getElementById('playBtn');
+playBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  if(audio.paused){
+    audio.play().then(()=> playBtn.textContent='Pause Musik').catch(()=> alert('Browser mencegah autoplay. Tekan Play lagi ya.'));
+  } else {
+    audio.pause(); playBtn.textContent='Putar Musik';
+  }
+});
+
+/* -------------------------
+  surprise button (re-show large message and confetti)
+-------------------------*/
+const surpriseBtn = document.getElementById('surpriseBtn');
+surpriseBtn.addEventListener('click', ()=>{
+  // scroll message to top and flash a little
+  const bigtext = document.getElementById('bigtext');
+  bigtext.scrollTo({top:0, behavior:'smooth'});
+  burst(40);
+});
+
+/* -------------------------
+  accessibility: open with Enter
+-------------------------*/
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Enter' && !isOpen) open();
+});
+
+/* -------------------------
+  Preload images quietly to reduce flicker
+-------------------------*/
+imgs.forEach(u=>{
+  const im = new Image();
+  im.src = u;
+});
+</script>
+</body>
+</html>
